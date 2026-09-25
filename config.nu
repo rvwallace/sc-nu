@@ -37,6 +37,7 @@ $env.config = {
                 }
             ]
         }
+    }
     buffer_editor: ($env.EDITOR? | default "nvim")
     keybindings: [
         # Alt-E: Open command line in $EDITOR (Note: Ctrl-O is also built-in natively)
