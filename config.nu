@@ -37,19 +37,19 @@ $env.config = {
                 }
             ]
         }
-    }
+    buffer_editor: ($env.EDITOR? | default "nvim")
     keybindings: [
-        # Ctrl-X Ctrl-E: Edit current command line in $EDITOR
+        # Alt-E: Open command line in $EDITOR (Note: Ctrl-O is also built-in natively)
         {
-            name: open_editor
-            modifier: control
+            name: open_editor_alt
+            modifier: alt
             keycode: char_e
             mode: [emacs, vi_insert]
             event: { send: OpenEditor }
         }
-        # Ctrl-X g: Quick Git status
+        # Ctrl-G and Alt-G: Quick Git status
         {
-            name: quick_git_status
+            name: quick_git_status_ctrl
             modifier: control
             keycode: char_g
             mode: [emacs, vi_insert]
@@ -58,10 +58,20 @@ $env.config = {
                 cmd: "if (git rev-parse --is-inside-work-tree err> /dev/null | str trim) == 'true' { git status -sb } else { print 'Not a git repository' }"
             }
         }
-        # Ctrl-X l: Quick ls
         {
-            name: quick_ls
-            modifier: control
+            name: quick_git_status_alt
+            modifier: alt
+            keycode: char_g
+            mode: [emacs, vi_insert]
+            event: {
+                send: executehostcommand
+                cmd: "if (git rev-parse --is-inside-work-tree err> /dev/null | str trim) == 'true' { git status -sb } else { print 'Not a git repository' }"
+            }
+        }
+        # Alt-L: Quick ls preview
+        {
+            name: quick_ls_alt
+            modifier: alt
             keycode: char_l
             mode: [emacs, vi_insert]
             event: {
