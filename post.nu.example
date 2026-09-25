@@ -1,0 +1,8 @@
+# Local Post Interactive Configuration Example (sc-nu)
+# Copy this file to local/post.nu (which is gitignored):
+#   cp post.nu.example local/post.nu
+#
+# Sourced late in config.nu for interactive shells only.
+# Use it for personal aliases, machine-specific commands, or experimental tools.
+
+# alias my-custom-tool = ...

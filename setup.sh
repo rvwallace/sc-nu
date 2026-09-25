@@ -36,9 +36,12 @@ link_file() {
 link_file "$SCRIPT_DIR/env.nu" "$NU_MAC_DIR/env.nu"
 link_file "$SCRIPT_DIR/config.nu" "$NU_MAC_DIR/config.nu"
 
-# Ensure local placeholder files exist in ~/.config/nushell/local
-touch "$NU_XDG_DIR/local/pre.nu"
-touch "$NU_XDG_DIR/local/post.nu"
+# Link local customizations directory
+mkdir -p "$SCRIPT_DIR/local"
+if [[ -d "$NU_XDG_DIR/local" && ! -L "$NU_XDG_DIR/local" ]]; then
+    rm -rf "$NU_XDG_DIR/local"
+fi
+link_file "$SCRIPT_DIR/local" "$NU_XDG_DIR/local"
 
 echo ""
 echo "✔ Setup complete! You can now start Nushell by running:"

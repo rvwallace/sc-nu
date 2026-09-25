@@ -1,0 +1,23 @@
+# Local Pre Environment Configuration Example (sc-nu)
+# Copy this file to local/pre.nu (which is gitignored):
+#   cp pre.nu.example local/pre.nu
+#
+# Sourced early in env.nu for all shells (interactive and non-interactive).
+# Use it for private environment variables, tokens, and API keys.
+
+# --- Identity ---
+# $env.JUMPCLOUD_USER = "your-jumpcloud-username"
+# $env.JUMPCLOUD_KEY = ($env.HOME | path join ".ssh/id_rsa_jumpcloud")
+
+# --- Cloudflare ---
+# $env.CLOUDFLARE_API_TOKEN = "your-cloudflare-api-token"
+
+# --- API Keys ---
+# $env.CONTEXT7_API_KEY = "your-context7-api-key"
+# $env.BRAVE_API_KEY = "your-brave-api-key"
+# $env.EXA_API_KEY = "your-exa-api-key"
+# $env.ANTHROPIC_API_KEY = "your-anthropic-api-key"
+# $env.OPENAI_API_KEY = "your-openai-api-key"
+
+# --- Paths ---
+# $env.OBSIDIAN_VAULT = ($env.HOME | path join "Documents/Vault")
