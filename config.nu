@@ -39,6 +39,15 @@ $env.config = {
         }
     }
     buffer_editor: ($env.EDITOR? | default "nvim")
+    # Disable OSC 8 hyperlinks to prevent upstream ansi-to-tui / tmux-snaglord
+    # parser bug from swallowing table columns in captured pane output
+    ls: {
+        use_ls_colors: true
+        clickable_links: false
+    }
+    shell_integration: {
+        osc8: false
+    }
 }
 
 # ------------------------------------------------------------------------------

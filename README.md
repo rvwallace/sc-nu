@@ -21,6 +21,8 @@
   - Chef Knife queries (`search node -F json`, inspecting `run_list` and node attributes)
   - Kubernetes (`kubectl get -o json`, filtering pods and container images)
   - Essential data operators (`select`, `where`, `flatten`, `transpose`, `explore`, `to md/json/yaml`)
+- **[Changelog](CHANGELOG.md)**: Notable releases, fixes, and configuration history.
+- **[Snaglord Hyperlink Issue Notes](docs/SNAGLORD_HYPERLINK_ISSUE.md)**: Details on upstream `ansi-to-tui` OSC 8 parser limitations and mitigation.
 
 ## Architecture & Directory Structure
 
@@ -29,6 +31,8 @@
 ├── env.nu                 # Environment variables, PATH deduplication, tool caching
 ├── config.nu              # Core options, keybindings, hooks, completion bridge
 ├── setup.sh               # Symlink installer for macOS & XDG
+├── CHANGELOG.md           # Release history and configuration changes
+├── docs/                  # Cheatsheet, cookbook, and issue notes
 ├── modules/
 │   ├── aliases.nu         # General aliases (eza, bat, python, brew, tmux)
 └── .gitignore             # Ignores local private files and history databases
@@ -63,6 +67,9 @@ All major integrations are pre-generated into `~/.cache/nushell/` on startup:
 - `Ctrl-R`: Interactive history search menu.
 - `Tab`: Tab completion menu.
 - `Up` / `Down`: History substring search.
+
+### 4. Terminal & Multiplexer Compatibility
+- **OSC 8 Hyperlinks Disabled**: `$env.config.ls.clickable_links` and `$env.config.shell_integration.osc8` are explicitly set to `false`. This avoids an upstream parser bug in `ansi-to-tui` (used by `tmux-snaglord`), where OSC 8 sequences terminated by standard ECMA-48 `ST` (`\x1b\`) cause subsequent table columns and filenames in directory listings to be swallowed during TUI rendering. All file colors (`LS_COLORS`), sizes, and table borders remain active. See [docs/SNAGLORD_HYPERLINK_ISSUE.md](docs/SNAGLORD_HYPERLINK_ISSUE.md) for technical details.
 
 ---
 
