@@ -6,8 +6,21 @@
 - **Architecture**: Modular separation with native typed pipelines, SQLite history, and seamless tool integrations.
 - **Toolbox Integration**: Native Nushell companion modules for AWS (`aws.env`), Kubernetes (`k.env`), Chef (`chef.env`), Git (`git.cdroot`), Tmux (`tp`), and Yazi (`y`).
 - **Completions & Integrations**: Powered by Carapace multi-shell bridge, Starship prompt, and Zoxide directory jumper.
+- **Documentation**: Includes a [Migration Cheatsheet](docs/CHEATSHEET.md) and [DevOps Data Cookbook](docs/DATA_COOKBOOK.md).
 
 ---
+
+## Documentation & Guides
+
+- **[Nushell Quick Reference & Migration Cheatsheet](docs/CHEATSHEET.md)**:
+  - Zsh vs. Nushell mental model & "Rosetta Stone"
+  - String interpolation (`$"..."`) & quoting rules
+  - Piping, redirection, and subexpressions
+- **[DevOps Data Manipulation Cookbook](docs/DATA_COOKBOOK.md)**:
+  - Working with AWS CLI (`describe-instances`, `sts`, `s3`, `security-groups`)
+  - Chef Knife queries (`search node -F json`, inspecting `run_list` and node attributes)
+  - Kubernetes (`kubectl get -o json`, filtering pods and container images)
+  - Essential data operators (`select`, `where`, `flatten`, `transpose`, `explore`, `to md/json/yaml`)
 
 ## Architecture & Directory Structure
 
