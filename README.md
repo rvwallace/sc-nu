@@ -46,9 +46,9 @@ All major integrations are pre-generated into `~/.cache/nushell/` on startup:
 - **Zoxide**: Smart directory jumper aliasing `cd`.
 
 ### 3. Keybindings (Reedline)
-- `Ctrl-X Ctrl-E`: Open and edit current command line in `$EDITOR` (`nvim`).
-- `Ctrl-X g`: Quick Git status preview (`git status -sb`).
-- `Ctrl-X l`: Quick directory listing (`ls`).
+- `Ctrl-O`: Open current command line in `$EDITOR` (`nvim`).
+- `Ctrl-R`: Interactive history search menu.
+- `Tab`: Tab completion menu.
 - `Up` / `Down`: History substring search.
 
 ---
