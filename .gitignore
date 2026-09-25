@@ -1,0 +1,12 @@
+# History databases
+history.sqlite3*
+.nu_history
+
+# Local private overrides (API keys, machine tokens)
+local/
+*.local.nu
+
+# Temporary files
+*.tmp
+*.log
+.DS_Store
