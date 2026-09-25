@@ -6,16 +6,20 @@
 export alias less = less -FSRXc
 export alias bat = bat --theme="Dracula" --italic-text=always --paging=always --color=always
 
-# Listing & Navigation (eza)
-export alias ls = eza --icons --group-directories-first
-export alias ll = eza -l --icons --group-directories-first
-export alias la = eza -la --icons --group-directories-first
+# Listing & Navigation
+# Native Nushell `ls` returns structured tables that support pipelines (| where, | sort-by, | get).
+export alias ll = ls -l
+export alias la = ls -a
+
+# Eza for dedicated visual formatting and tree view
+export alias ez = eza --icons --group-directories-first
 export alias lt = eza --tree --icons
 export alias lg = eza -l --git --git-repos --icons
 
 # ------------------------------------------------------------------------------
 # Development
 # ------------------------------------------------------------------------------
+# Python
 export alias python = python3
 export alias pip = python3 -m pip
 export alias ipy = python3 -m IPython
