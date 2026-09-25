@@ -57,6 +57,26 @@ aws ec2 describe-instances --output json
 | select Name InstanceId InstanceType PrivateIpAddress State.Name
 ```
 
+> [!TIP]
+> **Use the Toolbox helper `aws.ec2` (or `aws-ec2-nu`):**  
+> We built this exact un-nesting and tag extraction into `aws.ec2` in `toolbox/shell/modules/aws.nu`. You can query instances directly with zero boilerplate:
+> ```nu
+> # All running instances:
+> aws.ec2 | where state == "running"
+> 
+> # Filter by name pattern or instance type:
+> aws.ec2 | where name =~ "prod" | select name id type private_ip
+> 
+> # Quick positional filter (by name substring or i-xxxx):
+> aws.ec2 web-01
+> 
+> # Query by custom tag:
+> aws.ec2 | where tags.Environment? == "production"
+> 
+> # Find local SSH key pair:
+> aws.ec2-key web-01
+> ```
+
 ### Recipe 2: Quick Caller Identity / Account Check
 ```nu
 # Convert caller identity to a clean single-row record:
