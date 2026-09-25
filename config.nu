@@ -56,13 +56,13 @@ use ~/.cache/nushell/starship.nu
 # ------------------------------------------------------------------------------
 # Internal Modules & Helpers
 # ------------------------------------------------------------------------------
-use /Users/robert.wallace/silentcastle/projects/sc-nu/modules/aliases.nu *
-use /Users/robert.wallace/silentcastle/projects/sc-nu/modules/commands.nu *
+use ~/silentcastle/projects/sc-nu/modules/aliases.nu *
+use ~/silentcastle/projects/sc-nu/modules/commands.nu *
 
 # ------------------------------------------------------------------------------
 # Toolbox Shell Modules
 # ------------------------------------------------------------------------------
-use /Users/robert.wallace/silentcastle/projects/toolbox/shell/init.nu *
+use ~/silentcastle/projects/toolbox/shell/init.nu *
 
 # ------------------------------------------------------------------------------
 # User Local Post Customizations
