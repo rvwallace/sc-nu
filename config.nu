@@ -76,19 +76,13 @@ $env.config = {
 # App Integrations (Carapace, Starship, Zoxide)
 # ------------------------------------------------------------------------------
 # Carapace completion bridge
-if ("~/.cache/nushell/carapace.nu" | path exists) {
-    source ~/.cache/nushell/carapace.nu
-}
+source ~/.cache/nushell/carapace.nu
 
-# Zoxide smart directory jumper (aliases cd)
-if ("~/.cache/nushell/zoxide.nu" | path exists) {
-    source ~/.cache/nushell/zoxide.nu
-}
+# Zoxide smart directory jumper (aliases cd, cdi, z, zi)
+source ~/.cache/nushell/zoxide.nu
 
 # Starship prompt
-if ("~/.cache/nushell/starship.nu" | path exists) {
-    use ~/.cache/nushell/starship.nu
-}
+use ~/.cache/nushell/starship.nu
 
 # ------------------------------------------------------------------------------
 # Internal Modules & Helpers

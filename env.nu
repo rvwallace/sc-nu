@@ -114,7 +114,8 @@ if (which carapace | is-not-empty) {
 if (which zoxide | is-not-empty) {
     let target = ($cache_dir | path join "zoxide.nu")
     if not ($target | path exists) {
-        zoxide init --cmd cd nushell | save -f $target
+        let z_code = $"((zoxide init --cmd cd nushell))\nexport alias z = __zoxide_z\nexport alias zi = __zoxide_zi\n"
+        $z_code | save -f $target
     }
 }
 
