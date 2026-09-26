@@ -33,7 +33,7 @@ export def "ip.wan" [] {
 
 # Fetch default network interface
 export def "ip.if" [] {
-    netstat -nr | lines | find "default" | find -v "fe80" | first | split row -r '\s+' | last
+    netstat -nr | lines | str trim | find "default" | find -v "fe80" | first | split row -r '\s+' | last
 }
 
 # Fetch default gateway IP
