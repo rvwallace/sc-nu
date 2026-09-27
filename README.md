@@ -1,102 +1,110 @@
-# sc-nu: Performance-Optimized Nushell Configuration
+# sc-nu: Modular Nushell Configuration
 
-`sc-nu` is a modular, structured, performance-first Nushell configuration system designed to run alongside `sc-zsh`.
+`sc-nu` is a modular Nushell configuration system that grew from the [`sc-zsh`](https://github.com/rvwallace/sc-zsh) configuration. It runs beside `sc-zsh`.
 
-- **Cold Startup Time**: **~16ms** (compared to ~170ms in tuned Zsh, a >90% improvement).
-- **Architecture**: Modular separation with native typed pipelines, SQLite history, and seamless tool integrations.
-- **Toolbox Integration**: Native Nushell companion modules for AWS (`aws.env`), Kubernetes (`k.env`), Chef (`chef.env`), Git (`git.cdroot`), Tmux (`tp`), and Yazi (`y`).
-- **Completions & Integrations**: Powered by Carapace multi-shell bridge, Starship prompt, and Zoxide directory jumper.
-- **Documentation**: Includes a [Migration Cheatsheet](docs/CHEATSHEET.md) and [DevOps Data Cookbook](docs/DATA_COOKBOOK.md).
+- **Cold startup time**: About **16 ms**, compared with about **170 ms** in tuned Zsh. This is more than a 90 percent reduction.
+- **Structure**: Separate modules, typed Nushell pipelines, SQLite history, and tool integrations.
+- **[Toolbox modules](https://github.com/rvwallace/toolbox)**: Nushell modules for AWS (`aws.env`), Kubernetes (`k.env`), Chef (`chef.env`), Git (`git.cdroot`), Tmux (`tp`), and Yazi (`y`).
+- **Completions and integrations**: Carapace, Starship, and Zoxide.
+- **Guides**: A [Migration Cheatsheet](docs/CHEATSHEET.md) and a [DevOps Data Cookbook](docs/DATA_COOKBOOK.md).
 
 ---
 
-## Documentation & Guides
+## Documentation and Guides
 
-- **[Nushell Quick Reference & Migration Cheatsheet](docs/CHEATSHEET.md)**:
-  - Zsh vs. Nushell mental model & "Rosetta Stone"
-  - String interpolation (`$"..."`) & quoting rules
-  - Piping, redirection, and subexpressions
-- **[DevOps Data Manipulation Cookbook](docs/DATA_COOKBOOK.md)**:
-  - Working with AWS CLI (`describe-instances`, `sts`, `s3`, `security-groups`)
-  - Chef Knife queries (`search node -F json`, inspecting `run_list` and node attributes)
-  - Kubernetes (`kubectl get -o json`, filtering pods and container images)
-  - Essential data operators (`select`, `where`, `flatten`, `transpose`, `explore`, `to md/json/yaml`)
-- **[Changelog](CHANGELOG.md)**: Notable releases, fixes, and configuration history.
-- **[Snaglord Hyperlink Issue Notes](docs/SNAGLORD_HYPERLINK_ISSUE.md)**: Details on upstream `ansi-to-tui` OSC 8 parser limitations and mitigation.
+- **[Nushell Quick Reference and Migration Cheatsheet](docs/CHEATSHEET.md)**
+  - Compare Zsh and Nushell concepts with a Rosetta Stone.
+  - Review string interpolation (`$"..."`) and quoting rules.
+  - Review pipes, redirection, and subexpressions.
+- **[DevOps Data Manipulation Cookbook](docs/DATA_COOKBOOK.md)**
+  - Query AWS with `describe-instances`, `sts`, `s3`, and `security-groups`.
+  - Query Chef with `search node -F json`, `run_list`, and node attributes.
+  - Query Kubernetes with `kubectl get -o json`.
+  - Use `select`, `where`, `flatten`, `transpose`, `explore`, and `to md/json/yaml`.
+- **[Changelog](CHANGELOG.md)**: Read the configuration history.
+- **[Snaglord Hyperlink Issue Notes](docs/SNAGLORD_HYPERLINK_ISSUE.md)**: Read about the `ansi-to-tui` OSC 8 parser limits and the workaround.
 
-## Architecture & Directory Structure
+## Architecture and Directory Structure
 
 ```
 ~/silentcastle/projects/sc-nu/
 ├── env.nu                 # Environment variables, PATH deduplication, tool caching
 ├── config.nu              # Core options, keybindings, hooks, completion bridge
-├── setup.sh               # Symlink installer for macOS & XDG
+├── setup.sh               # Symlink installer for macOS and XDG
 ├── CHANGELOG.md           # Release history and configuration changes
 ├── docs/                  # Cheatsheet, cookbook, and issue notes
 ├── modules/
 │   ├── aliases.nu         # General aliases (eza, bat, python, brew, tmux)
-└── .gitignore             # Ignores local private files and history databases
+└── .gitignore             # Local private files and history databases
 ```
 
 ### Local Customizations (Untracked)
-- `~/.config/nushell/local/pre.nu` — Private environment variables, tokens, API keys (evaluated early in `env.nu`).
-- `~/.config/nushell/local/post.nu` — Machine-specific commands or overrides (evaluated late in `config.nu`).
 
----
+- `~/.config/nushell/local/pre.nu`: Private environment variables, tokens, and API keys. `env.nu` loads this file early.
+- `~/.config/nushell/local/post.nu`: Machine-specific commands and overrides. `config.nu` loads this file late.
 
 ## Key Features
 
-### 1. Toolbox Companion Modules (`projects/toolbox`)
-`sc-nu` imports native Nushell companion modules located in `~/silentcastle/projects/toolbox/shell/init.nu`:
-- **`aws.env`**: Interactive AWS profile/region switcher delegating to `aws-env` and exporting environment variables into the interactive shell with `def --env`.
-- **`k.env`**: Kubernetes environment switcher (`select` from `~/.kube` with `fzf` + `bat` preview, `context`, `ns`, `clear`).
-- **`chef.env`**: Chef environment switcher (`set` with `fzf` + `bat` preview, `clear`, `show`, `list`).
-- **`git.cdroot`**: Jump directly to git repository root.
-- **`tp`**: Run commands inside a tmux display popup window.
-- **`y`**: Yazi wrapper that navigates to the directory chosen on exit.
-- **`terraform`**: Auto-runs `tfswitch` on directory change via Nushell's `env_change.PWD` hook.
+### 1. [Toolbox Companion Modules](https://github.com/rvwallace/toolbox)
 
-### 2. App Integrations
-All major integrations are pre-generated into `~/.cache/nushell/` on startup:
-- **Starship**: Fast, rich prompt rendered natively.
-- **Carapace**: Primary completion bridge covering Git, Docker, Kubectl, AWS, GitHub CLI, and more with full tabular descriptions.
-- **Zoxide**: Smart directory jumper aliasing `cd`.
+`sc-nu` imports Nushell companion modules from the [toolbox repository](https://github.com/rvwallace/toolbox), at `~/silentcastle/projects/toolbox/shell/init.nu`:
+
+- **`aws.env`**: Switch AWS profiles and regions. The command uses `aws-env` and exports variables with `def --env`.
+- **`k.env`**: Select a Kubernetes configuration from `~/.kube` with `fzf` and a `bat` preview. Use `context`, `ns`, and `clear` to manage the session.
+- **`chef.env`**: Set a Chef environment with `fzf` and use `clear`, `show`, and `list`.
+- **`git.cdroot`**: Change to the root directory of the current Git repository.
+- **`tp`**: Run a command in a Tmux display popup.
+- **`y`**: Run Yazi and change to the selected directory when Yazi exits.
+- **`terraform`**: Run `tfswitch` when the directory changes through Nushell's `env_change.PWD` hook.
+
+### 2. Application Integrations
+
+The configuration generates integration files in `~/.cache/nushell/` at startup:
+
+- **Starship**: A fast prompt that renders in Nushell.
+- **Carapace**: A completion bridge for Git, Docker, Kubectl, AWS, GitHub CLI, and other commands.
+- **Zoxide**: A directory jumper that supplies the `cd` alias.
 
 ### 3. Keybindings (Reedline)
-- `Ctrl-O`: Open current command line in `$EDITOR` (`nvim`).
-- `Ctrl-R`: Interactive history search menu.
-- `Tab`: Tab completion menu.
-- `Up` / `Down`: History substring search.
 
-### 4. Terminal & Multiplexer Compatibility
-- **OSC 8 Hyperlinks Disabled**: `$env.config.ls.clickable_links` and `$env.config.shell_integration.osc8` are explicitly set to `false`. This avoids an upstream parser bug in `ansi-to-tui` (used by `tmux-snaglord`), where OSC 8 sequences terminated by standard ECMA-48 `ST` (`\x1b\`) cause subsequent table columns and filenames in directory listings to be swallowed during TUI rendering. All file colors (`LS_COLORS`), sizes, and table borders remain active. See [docs/SNAGLORD_HYPERLINK_ISSUE.md](docs/SNAGLORD_HYPERLINK_ISSUE.md) for technical details.
+- `Ctrl-O`: Open the current command line in `$EDITOR` (`nvim`).
+- `Ctrl-R`: Open the interactive history search menu.
+- `Tab`: Open the completion menu.
+- `Up` / `Down`: Search the history with the current input.
 
----
+### 4. Terminal and [Multiplexer Compatibility](https://github.com/rvwallace/tmux-conf)
 
-## Installation & Setup
+`$env.config.ls.clickable_links` and `$env.config.shell_integration.osc8` are set to `false`. This avoids an upstream parser bug in `ansi-to-tui`, which `tmux-snaglord` uses. The bug can swallow table columns and file names after OSC 8 sequences that end with the standard ECMA-48 `ST` (`\x1b\`) sequence.
 
-1. Install Nushell (if not already installed):
+File colors (`LS_COLORS`), file sizes, and table borders remain active. See the [Snaglord Hyperlink Issue Notes](docs/SNAGLORD_HYPERLINK_ISSUE.md) for details.
+
+## Installation and Setup
+
+1. Install Nushell:
+
    ```bash
    brew install nushell
    ```
 
-2. Link configuration to macOS Application Support and XDG directories:
+2. Link the configuration to the macOS Application Support and XDG directories:
+
    ```bash
    cd ~/silentcastle/projects/sc-nu
    ./setup.sh
    ```
 
-3. Launch Nushell:
+3. Start Nushell:
+
    ```bash
    nu
    ```
 
----
+## Profiling and Benchmarking
 
-## Profiling & Benchmarking
+Run this command to measure cold startup time:
 
-To test cold startup time:
 ```bash
 nu -c 'timeit { nu -c "exit" }'
 ```
-*Expected: ~15ms - 25ms.*
+
+Expected time: **15 ms to 25 ms**.

@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### 2026-09-27
+
+- Updated `README.md` with the project history and links to the `sc-zsh`, `toolbox`, and `tmux-conf` repositories
+
 ### 2026-09-26
 
 - Trimmed route-table lines before parsing in `ip.if` to prevent blank output from `last`
