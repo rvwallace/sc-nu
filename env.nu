@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------
 # Cache & Workspace Directories
 # ------------------------------------------------------------------------------
-let cache_dir = ($env.XDG_CACHE_HOME? | default ($env.HOME | path join ".cache") | path join "nushell")
+let cache_dir = $nu.cache-dir
 if not ($cache_dir | path exists) {
     mkdir $cache_dir
 }
@@ -93,53 +93,97 @@ $env.CARAPACE_BRIDGES = "gen,zsh,fish,bash,inshellisense"
 # ------------------------------------------------------------------------------
 # Integration Script Pre-generation (Cached)
 # ------------------------------------------------------------------------------
-# Create empty files when an optional integration is not installed. Nushell
-# checks `source` targets before it evaluates config.nu.
-for integration in [starship carapace zoxide] {
-    let target = ($cache_dir | path join $"($integration).nu")
+def cache_fingerprint [tool_version: string generation_command: string] {
+    let nu_version = (version).version
+    [
+        "format=2"
+        $"nu=($nu_version)"
+        $"tool=($tool_version)"
+        $"command=($generation_command)"
+        $"bridges=($env.CARAPACE_BRIDGES)"
+    ] | str join (char nl)
+}
+
+def cache_needs_update [target: string version_file: string fingerprint: string] {
     if not ($target | path exists) {
-        "" | save -f $target
+        return true
+    }
+    if ($target | open | str trim | is-empty) {
+        return true
+    }
+    if not ($version_file | path exists) {
+        return true
+    }
+    ($version_file | open | str trim) != $fingerprint
+}
+
+def write_cache_atomic [target: string content: string] {
+    let temporary = $"($target).tmp.(random uuid)"
+    $content | save -f $temporary
+    mv -f $temporary $target
+}
+
+def ensure_cache_placeholder [target: string] {
+    if not ($target | path exists) {
+        write_cache_atomic $target ""
+    }
+}
+
+def tool_version [tool: string] {
+    if (which $tool | is-empty) {
+        "unavailable"
+    } else {
+        ^$tool --version | lines | str join " " | str trim
     }
 }
 
 # Starship
-if (which starship | is-not-empty) {
-    let target = ($cache_dir | path join "starship.nu")
-    let needs_generation = if ($target | path exists) {
-        $target | open | str trim | is-empty
-    } else {
-        true
-    }
-    if $needs_generation {
-        starship init nu | save -f $target
-    }
+let starship_target = ($cache_dir | path join "starship.nu")
+let starship_version_file = ($cache_dir | path join "starship.version")
+let starship_version = (tool_version "starship")
+let starship_fingerprint = (cache_fingerprint $starship_version "starship init nu")
+ensure_cache_placeholder $starship_target
+if (which starship | is-not-empty) and (cache_needs_update $starship_target $starship_version_file $starship_fingerprint) {
+    let generated = (starship init nu | str join (char nl))
+    write_cache_atomic $starship_target $generated
+    write_cache_atomic $starship_version_file $starship_fingerprint
+} else if not ($starship_version_file | path exists) {
+    write_cache_atomic $starship_version_file $starship_fingerprint
 }
 
 # Carapace
-if (which carapace | is-not-empty) {
-    let target = ($cache_dir | path join "carapace.nu")
-    let needs_generation = if ($target | path exists) {
-        $target | open | str trim | is-empty
+let carapace_target = ($cache_dir | path join "carapace.nu")
+let carapace_version_file = ($cache_dir | path join "carapace.version")
+let carapace_version = (tool_version "carapace")
+let carapace_fingerprint = (cache_fingerprint $carapace_version "carapace _carapace nushell; adapter=place-v1")
+ensure_cache_placeholder $carapace_target
+if (which carapace | is-not-empty) and (cache_needs_update $carapace_target $carapace_version_file $carapace_fingerprint) {
+    let generated = (carapace _carapace nushell | str join (char nl))
+    let legacy_header = "let carapace_completer = {|spans|"
+    let compatible_header = ("let carapace_completer = {|place|" + (char nl) + "  let spans = $place.command")
+    let adapted = if ($generated | str contains $legacy_header) {
+        $generated | str replace $legacy_header $compatible_header
     } else {
-        true
+        $generated
     }
-    if $needs_generation {
-        carapace _carapace nushell | save -f $target
-    }
+    write_cache_atomic $carapace_target $adapted
+    write_cache_atomic $carapace_version_file $carapace_fingerprint
+} else if not ($carapace_version_file | path exists) {
+    write_cache_atomic $carapace_version_file $carapace_fingerprint
 }
 
 # Zoxide
-if (which zoxide | is-not-empty) {
-    let target = ($cache_dir | path join "zoxide.nu")
-    let needs_generation = if ($target | path exists) {
-        $target | open | str trim | is-empty
-    } else {
-        true
-    }
-    if $needs_generation {
-        let z_code = $"((zoxide init --cmd cd nushell))\nexport alias z = __zoxide_z\nexport alias zi = __zoxide_zi\n"
-        $z_code | save -f $target
-    }
+let zoxide_target = ($cache_dir | path join "zoxide.nu")
+let zoxide_version_file = ($cache_dir | path join "zoxide.version")
+let zoxide_version = (tool_version "zoxide")
+let zoxide_fingerprint = (cache_fingerprint $zoxide_version "zoxide init --cmd cd nushell")
+ensure_cache_placeholder $zoxide_target
+if (which zoxide | is-not-empty) and (cache_needs_update $zoxide_target $zoxide_version_file $zoxide_fingerprint) {
+    let generated = $"((zoxide init --cmd cd nushell))\nexport alias z = __zoxide_z\nexport alias zi = __zoxide_zi\n"
+    write_cache_atomic $zoxide_target $generated
+    write_cache_atomic $zoxide_version_file $zoxide_fingerprint
+} else if not ($zoxide_version_file | path exists) {
+    write_cache_atomic $zoxide_version_file $zoxide_fingerprint
 }
 
 # ------------------------------------------------------------------------------

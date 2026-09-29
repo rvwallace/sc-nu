@@ -61,7 +61,7 @@
 
 ### 2. Application Integrations
 
-The configuration generates integration files in `~/.cache/nushell/` at startup:
+The configuration generates integration files in Nushell's cache directory at startup. It stores a version sidecar next to each generated file and regenerates the file when the tool, Nushell, or generation settings change:
 
 - **Starship**: A fast prompt that renders in Nushell.
 - **Carapace**: A completion bridge for Git, Docker, Kubectl, AWS, GitHub CLI, and other commands.
@@ -106,6 +106,8 @@ Run the read-only doctor command when you want to check the installation:
 ```
 
 Run `./setup.sh` again to repair missing links or directories. The script does not delete existing files. Set `XDG_CONFIG_HOME` to an absolute directory before setup when you use a custom XDG location.
+
+Run `./scripts/validate-cache.sh` to test integration cache generation and invalidation in an isolated home directory.
 
 ## Profiling and Benchmarking
 

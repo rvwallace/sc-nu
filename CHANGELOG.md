@@ -17,6 +17,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Move organization-specific GitLab search code to private `local/post.nu`
 - Link the installation instructions to Nushell's official guide so users can select a current package or binary
 - Create required local and optional integration files before Nushell parses startup configuration
+- Add versioned, atomic cache generation for Starship, Carapace, and Zoxide
+- Add an isolated cache validation script for first generation, reuse, invalidation, and Carapace compatibility
 
 ### 2026-09-27
 

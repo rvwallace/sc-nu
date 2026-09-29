@@ -53,7 +53,7 @@ $env.config = {
 # ------------------------------------------------------------------------------
 # App Integrations (Carapace, Starship, Zoxide)
 # ------------------------------------------------------------------------------
-const cache_dir = ($nu.default-config-dir | path dirname | path dirname | path join ".cache/nushell")
+const cache_dir = $nu.cache-dir
 
 # Carapace completion bridge
 source ($cache_dir | path join "carapace.nu")
