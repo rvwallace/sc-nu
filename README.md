@@ -82,13 +82,7 @@ File colors (`LS_COLORS`), file sizes, and table borders remain active. See the 
 
 ## Installation and Setup
 
-1. Install Nushell with your operating system's package manager.
-
-   On macOS with Homebrew:
-
-   ```bash
-   brew install nushell
-   ```
+1. Install Nushell by using the [official Nushell installation guide](https://www.nushell.sh/book/installation.html). The guide lists current packages, pre-built binaries, and source installation methods for each operating system. Distribution repositories can provide older Nushell versions.
 
 2. Install the configuration:
 

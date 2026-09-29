@@ -102,6 +102,8 @@ ensure_local_directory() {
     else
         mkdir -p "$local_dir"
     fi
+
+    touch "$local_dir/pre.nu" "$local_dir/post.nu"
 }
 
 if [[ "$(uname -s)" == "Darwin" ]]; then

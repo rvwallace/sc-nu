@@ -93,10 +93,24 @@ $env.CARAPACE_BRIDGES = "gen,zsh,fish,bash,inshellisense"
 # ------------------------------------------------------------------------------
 # Integration Script Pre-generation (Cached)
 # ------------------------------------------------------------------------------
+# Create empty files when an optional integration is not installed. Nushell
+# checks `source` targets before it evaluates config.nu.
+for integration in [starship carapace zoxide] {
+    let target = ($cache_dir | path join $"($integration).nu")
+    if not ($target | path exists) {
+        "" | save -f $target
+    }
+}
+
 # Starship
 if (which starship | is-not-empty) {
     let target = ($cache_dir | path join "starship.nu")
-    if not ($target | path exists) {
+    let needs_generation = if ($target | path exists) {
+        $target | open | str trim | is-empty
+    } else {
+        true
+    }
+    if $needs_generation {
         starship init nu | save -f $target
     }
 }
@@ -104,7 +118,12 @@ if (which starship | is-not-empty) {
 # Carapace
 if (which carapace | is-not-empty) {
     let target = ($cache_dir | path join "carapace.nu")
-    if not ($target | path exists) {
+    let needs_generation = if ($target | path exists) {
+        $target | open | str trim | is-empty
+    } else {
+        true
+    }
+    if $needs_generation {
         carapace _carapace nushell | save -f $target
     }
 }
@@ -112,7 +131,12 @@ if (which carapace | is-not-empty) {
 # Zoxide
 if (which zoxide | is-not-empty) {
     let target = ($cache_dir | path join "zoxide.nu")
-    if not ($target | path exists) {
+    let needs_generation = if ($target | path exists) {
+        $target | open | str trim | is-empty
+    } else {
+        true
+    }
+    if $needs_generation {
         let z_code = $"((zoxide init --cmd cd nushell))\nexport alias z = __zoxide_z\nexport alias zi = __zoxide_zi\n"
         $z_code | save -f $target
     }

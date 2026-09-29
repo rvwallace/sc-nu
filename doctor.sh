@@ -46,6 +46,14 @@ else
     fail "Local customization directory is missing or still a symlink"
 fi
 
+for local_file in pre.nu post.nu; do
+    if [[ -f "$NU_XDG_DIR/local/$local_file" ]]; then
+        pass "Local startup file exists: $NU_XDG_DIR/local/$local_file"
+    else
+        fail "Local startup file is missing: $NU_XDG_DIR/local/$local_file"
+    fi
+done
+
 if [[ "$(uname -s)" == "Darwin" ]]; then
     check_link "$NU_XDG_DIR" "$NU_MAC_DIR"
 fi
