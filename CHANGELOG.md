@@ -19,6 +19,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Create required local and optional integration files before Nushell parses startup configuration
 - Add versioned, atomic cache generation for Starship, Carapace, and Zoxide
 - Add an isolated cache validation script for first generation, reuse, invalidation, and Carapace compatibility
+- Load the private Toolbox companion configuration as a module so exported commands remain available
 
 ### 2026-09-27
 

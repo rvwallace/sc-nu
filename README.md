@@ -43,13 +43,19 @@
 ### Local Customizations (Untracked)
 
 - `~/.config/nushell/local/pre.nu`: Private environment variables, tokens, and API keys. `env.nu` loads this file early.
-- `~/.config/nushell/local/post.nu`: Machine-specific commands and overrides. `config.nu` loads this file late.
+- `~/.config/nushell/local/post.nu`: Machine-specific commands and overrides. `config.nu` loads this file late as a module.
 
 ## Key Features
 
 ### 1. [Toolbox Companion Modules](https://github.com/rvwallace/toolbox)
 
 `sc-nu` imports Nushell companion modules from the [toolbox repository](https://github.com/rvwallace/toolbox). Set the toolbox path in the private `local/post.nu` file:
+
+```nu
+export use /path/to/toolbox/shell/init.nu *
+```
+
+The module import makes exported Toolbox commands, including `toolboxctl`, available in the interactive session. Keep the checkout path in the private file; do not add a machine-specific path to this repository.
 
 - **`aws.env`**: Switch AWS profiles and regions. The command uses `aws-env` and exports variables with `def --env`.
 - **`k.env`**: Select a Kubernetes configuration from `~/.kube` with `fzf` and a `bat` preview. Use `context`, `ns`, and `clear` to manage the session.

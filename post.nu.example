@@ -2,13 +2,12 @@
 # Copy this file to the XDG Nushell directory (which is gitignored):
 #   cp post.nu.example "${XDG_CONFIG_HOME:-$HOME/.config}/nushell/local/post.nu"
 #
-# Sourced late in config.nu for interactive shells only.
+# Loaded as a module late in config.nu for interactive shells only.
 # Use it for personal aliases, machine-specific commands, or experimental tools.
 
 # Toolbox companion modules:
 # https://github.com/rvwallace/toolbox
 # Change this path to your toolbox checkout.
-const toolbox_init = "/path/to/toolbox/shell/init.nu"
-source $toolbox_init
+export use /path/to/toolbox/shell/init.nu *
 
 # alias my-custom-tool = ...
