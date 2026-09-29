@@ -65,15 +65,11 @@ use ~/.cache/nushell/starship.nu
 # ------------------------------------------------------------------------------
 # Internal Modules & Helpers
 # ------------------------------------------------------------------------------
-use ~/silentcastle/projects/sc-nu/modules/aliases.nu *
-use ~/silentcastle/projects/sc-nu/modules/commands.nu *
-
-# ------------------------------------------------------------------------------
-# Toolbox Shell Modules
-# ------------------------------------------------------------------------------
-use ~/silentcastle/projects/toolbox/shell/init.nu *
+const sc_nu_dir = ($nu.config-path | path dirname)
+source ($sc_nu_dir | path join "modules/aliases.nu")
+source ($sc_nu_dir | path join "modules/commands.nu")
 
 # ------------------------------------------------------------------------------
 # User Local Post Customizations
 # ------------------------------------------------------------------------------
-source ~/.config/nushell/local/post.nu
+source ($nu.default-config-dir | path join "local/post.nu")

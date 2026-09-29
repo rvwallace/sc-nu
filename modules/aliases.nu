@@ -24,14 +24,41 @@ export alias python = python3
 export alias pip = python3 -m pip
 export alias ipy = python3 -m IPython
 export alias uv.exp = uv export --format requirements-txt --no-hashes --output-file requirements.txt --quiet
-export alias brew.bundle = brew bundle dump --global --force
+
+export def "brew.bundle" [] {
+    if (which brew | is-empty) {
+        print -e "Homebrew is not installed"
+        return 1
+    }
+    ^brew bundle dump --global --force
+}
 
 # ------------------------------------------------------------------------------
-# System & Monitoring (macOS)
+# System & Monitoring
 # ------------------------------------------------------------------------------
-export alias top = top -R -F -s 5
-export alias dns = scutil --dns
-export alias ip.info = scutil --nwi
+export def top [...args] {
+    if $nu.os-info.name == "macos" {
+        ^top -R -F -s 5 ...$args
+    } else {
+        ^top ...$args
+    }
+}
+
+export def dns [] {
+    if $nu.os-info.name != "macos" {
+        print -e "dns uses scutil and is available only on macOS"
+        return 1
+    }
+    ^scutil --dns
+}
+
+export def "ip.info" [] {
+    if $nu.os-info.name != "macos" {
+        print -e "ip.info uses scutil and is available only on macOS"
+        return 1
+    }
+    ^scutil --nwi
+}
 
 # Tmux
 export alias tx = tmux-exec

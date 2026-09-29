@@ -30,11 +30,13 @@
 ~/silentcastle/projects/sc-nu/
 ├── env.nu                 # Environment variables, PATH deduplication, tool caching
 ├── config.nu              # Core options, keybindings, hooks, completion bridge
-├── setup.sh               # Symlink installer for macOS and XDG
+├── setup.sh               # Install and repair the configuration
+├── doctor.sh               # Check the installation without changing files
 ├── CHANGELOG.md           # Release history and configuration changes
 ├── docs/                  # Cheatsheet, cookbook, and issue notes
 ├── modules/
 │   ├── aliases.nu         # General aliases (eza, bat, python, brew, tmux)
+│   └── commands.nu        # Custom commands (ql, rm.dstore, ip.wan, ip.if, ip.gw)
 └── .gitignore             # Local private files and history databases
 ```
 
@@ -47,7 +49,7 @@
 
 ### 1. [Toolbox Companion Modules](https://github.com/rvwallace/toolbox)
 
-`sc-nu` imports Nushell companion modules from the [toolbox repository](https://github.com/rvwallace/toolbox), at `~/silentcastle/projects/toolbox/shell/init.nu`:
+`sc-nu` imports Nushell companion modules from the [toolbox repository](https://github.com/rvwallace/toolbox). Set the toolbox path in the private `local/post.nu` file:
 
 - **`aws.env`**: Switch AWS profiles and regions. The command uses `aws-env` and exports variables with `def --env`.
 - **`k.env`**: Select a Kubernetes configuration from `~/.kube` with `fzf` and a `bat` preview. Use `context`, `ns`, and `clear` to manage the session.
@@ -80,13 +82,15 @@ File colors (`LS_COLORS`), file sizes, and table borders remain active. See the 
 
 ## Installation and Setup
 
-1. Install Nushell:
+1. Install Nushell with your operating system's package manager.
+
+   On macOS with Homebrew:
 
    ```bash
    brew install nushell
    ```
 
-2. Link the configuration to the macOS Application Support and XDG directories:
+2. Install the configuration:
 
    ```bash
    cd ~/silentcastle/projects/sc-nu
@@ -98,6 +102,16 @@ File colors (`LS_COLORS`), file sizes, and table borders remain active. See the 
    ```bash
    nu
    ```
+
+`setup.sh` installs `env.nu` and `config.nu` in `~/.config/nushell`. On macOS, it also links `~/Library/Application Support/nushell` to that directory. This gives macOS and Linux the same configuration path. If the old macOS directory contains Nushell data, the script moves that data to the XDG directory. If a file conflicts, the script keeps a timestamped backup.
+
+Run the read-only doctor command when you want to check the installation:
+
+```bash
+./doctor.sh
+```
+
+Run `./setup.sh` again to repair missing links or directories. The script does not delete existing files. Set `XDG_CONFIG_HOME` to an absolute directory before setup when you use a custom XDG location.
 
 ## Profiling and Benchmarking
 

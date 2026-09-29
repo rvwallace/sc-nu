@@ -1,6 +1,6 @@
 # Local Pre Environment Configuration Example (sc-nu)
-# Copy this file to local/pre.nu (which is gitignored):
-#   cp pre.nu.example local/pre.nu
+# Copy this file to the XDG Nushell directory (which is gitignored):
+#   cp pre.nu.example "${XDG_CONFIG_HOME:-$HOME/.config}/nushell/local/pre.nu"
 #
 # Sourced early in env.nu for all shells (interactive and non-interactive).
 # Use it for private environment variables, tokens, and API keys.

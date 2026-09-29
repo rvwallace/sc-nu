@@ -13,7 +13,7 @@ $env.NU_CACHE_DIR = $cache_dir
 # ------------------------------------------------------------------------------
 # Local Directory & Placeholder Setup (Ensures parse-time safety for optional sources)
 # ------------------------------------------------------------------------------
-let local_dir = ($env.HOME | path join ".config/nushell/local")
+let local_dir = ($nu.default-config-dir | path join "local")
 let local_pre = ($local_dir | path join "pre.nu")
 let local_post = ($local_dir | path join "post.nu")
 
@@ -61,7 +61,6 @@ let user_paths = [
     $"($env.HOME)/.antigravity/antigravity/bin"
     $"($env.HOME)/.bun/bin"
     "/Applications/Obsidian.app/Contents/MacOS"
-    $"($env.HOME)/silentcastle/projects/toolbox/bin"
 ]
 
 $env.PATH = (
@@ -122,4 +121,4 @@ if (which zoxide | is-not-empty) {
 # ------------------------------------------------------------------------------
 # Local Pre Customizations
 # ------------------------------------------------------------------------------
-source ~/.config/nushell/local/pre.nu
+source ($nu.default-config-dir | path join "local/pre.nu")

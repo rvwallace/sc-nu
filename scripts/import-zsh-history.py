@@ -15,7 +15,8 @@ from datetime import datetime
 def main():
     home = os.path.expanduser("~")
     zsh_history_path = os.path.join(home, ".zsh_history")
-    nu_db_path = os.path.join(home, "Library/Application Support/nushell/history.sqlite3")
+    xdg_config_home = os.environ.get("XDG_CONFIG_HOME", os.path.join(home, ".config"))
+    nu_db_path = os.path.join(xdg_config_home, "nushell", "history.sqlite3")
 
     if not os.path.exists(zsh_history_path):
         print(f"Error: Zsh history not found at {zsh_history_path}", file=sys.stderr)

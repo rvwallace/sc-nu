@@ -6,7 +6,11 @@ export def ql [...files: path] {
         print -e "Usage: ql <file> [<file> ...]"
         return 1
     }
-    qlmanage -p ...$files err> /dev/null out> /dev/null
+    if $nu.os-info.name != "macos" or (which qlmanage | is-empty) {
+        print -e "ql is available only on macOS"
+        return 1
+    }
+    ^qlmanage -p ...$files err> /dev/null out> /dev/null
 }
 
 # Recursively remove .DS_Store files
@@ -33,19 +37,32 @@ export def "ip.wan" [] {
 
 # Fetch default network interface
 export def "ip.if" [] {
-    netstat -nr | lines | str trim | find "default" | find -v "fe80" | first | split row -r '\s+' | last
+    if (which netstat | is-not-empty) {
+        netstat -nr | lines | str trim | find "default" | find -v "fe80" | first | split row -r '\s+' | last
+    } else if (which ip | is-not-empty) {
+        ip route | lines | find "default" | first | split row -r '\s+' | get 4
+    } else {
+        print -e "Neither netstat nor ip is installed"
+        return 1
+    }
 }
 
 # Fetch default gateway IP
 export def "ip.gw" [] {
-    netstat -nr | lines | find "default" | find -v "fe80" | first | split row -r '\s+' | get 1
+    if (which netstat | is-not-empty) {
+        netstat -nr | lines | find "default" | find -v "fe80" | first | split row -r '\s+' | get 1
+    } else if (which ip | is-not-empty) {
+        ip route | lines | find "default" | first | split row -r '\s+' | get 2
+    } else {
+        print -e "Neither netstat nor ip is installed"
+        return 1
+    }
 }
 
 # Check HTTP status code
 export def "http.chk" [url: string] {
     curl -o /dev/null -s -w "%{http_code}\n" $url
 }
-
 
 # Python virtual environment activator
 export def --env activate [venv_dir: path = ".venv"] {

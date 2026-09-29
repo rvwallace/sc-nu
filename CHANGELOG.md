@@ -6,6 +6,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### 2026-09-29
+
+- Use `~/.config/nushell` as the canonical configuration directory on macOS and Linux
+- Migrate existing macOS Nushell data from `~/Library/Application Support/nushell` and keep that path as a compatibility symlink
+- Add `doctor.sh` for read-only installation checks and make `setup.sh` repair existing installs with timestamped backups
+- Load the toolbox companion modules from the private `local/post.nu` file
+- Derive the `sc-nu` module path from `$nu.config-path` and keep the machine-specific toolbox path in private `local/post.nu`
+- Guard macOS-only commands and use XDG paths for history import and Linux route commands
+- Move organization-specific GitLab search code to private `local/post.nu`
+
 ### 2026-09-27
 
 - Updated `README.md` with the project history and links to the `sc-zsh`, `toolbox`, and `tmux-conf` repositories

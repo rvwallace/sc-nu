@@ -1,8 +1,14 @@
 # Local Post Interactive Configuration Example (sc-nu)
-# Copy this file to local/post.nu (which is gitignored):
-#   cp post.nu.example local/post.nu
+# Copy this file to the XDG Nushell directory (which is gitignored):
+#   cp post.nu.example "${XDG_CONFIG_HOME:-$HOME/.config}/nushell/local/post.nu"
 #
 # Sourced late in config.nu for interactive shells only.
 # Use it for personal aliases, machine-specific commands, or experimental tools.
+
+# Toolbox companion modules:
+# https://github.com/rvwallace/toolbox
+# Change this path to your toolbox checkout.
+const toolbox_init = "/path/to/toolbox/shell/init.nu"
+source $toolbox_init
 
 # alias my-custom-tool = ...
