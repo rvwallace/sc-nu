@@ -13,9 +13,11 @@ fi
 NU_XDG_DIR="$XDG_ROOT/nushell"
 NU_MAC_DIR="$HOME/Library/Application Support/nushell"
 failures=0
+warnings=0
 
 pass() { echo "✔ $1"; }
 fail() { echo "✘ $1"; failures=$((failures + 1)); }
+warn() { echo "⚠ $1"; warnings=$((warnings + 1)); }
 
 canonical_path() {
     (cd "$1" && pwd -P)
@@ -71,9 +73,26 @@ else
     fail "Nushell executable is not available"
 fi
 
+if command -v tfswitch >/dev/null 2>&1; then
+    TFSWITCH_CONFIG="$HOME/.tfswitch.toml"
+    if [[ ! -f "$TFSWITCH_CONFIG" ]]; then
+        warn "tfswitch is installed but its config is missing: $TFSWITCH_CONFIG"
+    elif rg -q '^[[:space:]]*bin[[:space:]]*=' "$TFSWITCH_CONFIG"; then
+        pass "tfswitch config defines a binary path: $TFSWITCH_CONFIG"
+    else
+        warn "tfswitch config does not define bin: $TFSWITCH_CONFIG"
+    fi
+else
+    pass "tfswitch is not installed; skipped tfswitch config check"
+fi
+
 if (( failures > 0 )); then
     echo "Doctor found $failures problem(s). Run ./setup.sh to repair the installation."
     exit 1
 fi
 
-echo "Doctor found no problems."
+if (( warnings > 0 )); then
+    echo "Doctor found no blocking problems and $warnings warning(s)."
+else
+    echo "Doctor found no problems."
+fi

@@ -6,6 +6,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### 2026-09-30
+
+- Fix the Nushell Terraform directory-change hook so `tfswitch` completes in its non-interactive hook context and honors the configured `~/.tfswitch.toml` `bin` path
+- Add a read-only `doctor.sh` warning when `tfswitch` is installed without a `bin` configuration
+
 ### 2026-09-29
 
 - Use `~/.config/nushell` as the canonical configuration directory on macOS and Linux

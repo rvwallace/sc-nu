@@ -65,6 +65,22 @@ The module import makes exported Toolbox commands, including `toolboxctl`, avail
 - **`y`**: Run Yazi and change to the selected directory when Yazi exits.
 - **`terraform`**: Run `tfswitch` when the directory changes through Nushell's `env_change.PWD` hook.
 
+### Terraform Version Switching
+
+When `tfswitch` is installed, the PWD hook runs it when the new directory contains
+`.terraform-version`, `.tfswitchrc`, or `versions.tf`. To keep the hook's
+non-interactive execution on the same Terraform binary path as other shells,
+configure the managed binary in `~/.tfswitch.toml`:
+
+```toml
+bin = "$HOME/.local/bin/terraform"
+```
+
+The hook uses the configured `bin` value when present. Without the file, it
+falls back to the Terraform executable resolved on `PATH`, then
+`~/.local/bin/terraform`. Run `./doctor.sh` to check the configuration; a
+missing `~/.tfswitch.toml` is reported as a warning when `tfswitch` is installed.
+
 ### 2. Application Integrations
 
 The configuration generates integration files in Nushell's cache directory at startup. It stores a version sidecar next to each generated file and regenerates the file when the tool, Nushell, or generation settings change:

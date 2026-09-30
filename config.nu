@@ -1,6 +1,30 @@
 # Nushell Configuration (sc-nu)
 # Evaluated for interactive sessions.
 
+# Use tfswitch's configured binary path when available. In a PWD hook,
+# tfswitch's automatic path detection can fall back to ~/bin because the hook
+# is non-interactive, so use the Terraform executable currently on PATH as the
+# fallback target.
+let tfswitch_config = ($env.HOME | path join ".tfswitch.toml")
+let configured_tfswitch_bin = if ($tfswitch_config | path exists) {
+    open $tfswitch_config | get -o bin
+} else {
+    null
+}
+let resolved_tfswitch_bin = if ($configured_tfswitch_bin | is-not-empty) {
+    $configured_tfswitch_bin
+    | str replace --regex '^\$HOME' $env.HOME
+    | str replace --regex '^~' $env.HOME
+    | path expand --no-symlink
+} else {
+    which terraform
+    | where type == external
+    | get path
+    | first
+    | default ($env.HOME | path join ".local/bin/terraform")
+}
+$env.TFSWITCH_BIN = $resolved_tfswitch_bin
+
 # ------------------------------------------------------------------------------
 # Core Shell Settings
 # ------------------------------------------------------------------------------
@@ -31,7 +55,15 @@ $env.config = {
                 { |before, after|
                     if ([".terraform-version", ".tfswitchrc", "versions.tf"] | any { |f| $f | path exists }) {
                         if (which tfswitch | is-not-empty) {
-                            ^tfswitch
+                            try {
+                                if ($env.TFSWITCH_BIN | is-empty) {
+                                    do -c { ^tfswitch }
+                                } else {
+                                    do -c { ^tfswitch --bin $env.TFSWITCH_BIN }
+                                }
+                            } catch {|err|
+                                print $err.rendered
+                            }
                         }
                     }
                 }
