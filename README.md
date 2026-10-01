@@ -43,7 +43,7 @@
 ### Local Customizations (Untracked)
 
 - `~/.config/nushell/local/pre.nu`: Private environment variables, tokens, and API keys. `env.nu` loads this file early.
-- `~/.config/nushell/local/post.nu`: Machine-specific commands and overrides. `config.nu` loads this file late as a module.
+- `~/.config/nushell/local/post.nu`: Machine-specific commands and overrides. `config.nu` loads this file late during startup.
 
 ## Key Features
 

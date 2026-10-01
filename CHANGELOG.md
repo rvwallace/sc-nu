@@ -8,6 +8,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### 2026-09-30
 
+- Load the private `local/post.nu` file with `source` so Toolbox environment exports, including its `bin` directory on `PATH`, persist during startup
 - Fix the Nushell Terraform directory-change hook so `tfswitch` completes in its non-interactive hook context and honors the configured `~/.tfswitch.toml` `bin` path
 - Add a read-only `doctor.sh` warning when `tfswitch` is installed without a `bin` configuration
 

@@ -108,4 +108,4 @@ source ($sc_nu_dir | path join "modules/commands.nu")
 # ------------------------------------------------------------------------------
 const local_post_path = ($nu.default-config-dir | path join "local/post.nu")
 const local_post = if ($local_post_path | path exists) { $local_post_path } else { null }
-overlay use $local_post
+source $local_post
