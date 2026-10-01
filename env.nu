@@ -176,10 +176,12 @@ if (which carapace | is-not-empty) and (cache_needs_update $carapace_target $car
 let zoxide_target = ($cache_dir | path join "zoxide.nu")
 let zoxide_version_file = ($cache_dir | path join "zoxide.version")
 let zoxide_version = (tool_version "zoxide")
-let zoxide_fingerprint = (cache_fingerprint $zoxide_version "zoxide init --cmd cd nushell")
+let zoxide_fingerprint = (cache_fingerprint $zoxide_version "zoxide init --no-cmd nushell")
 ensure_cache_placeholder $zoxide_target
 if (which zoxide | is-not-empty) and (cache_needs_update $zoxide_target $zoxide_version_file $zoxide_fingerprint) {
-    let generated = $"((zoxide init --cmd cd nushell))\nexport alias z = __zoxide_z\nexport alias zi = __zoxide_zi\n"
+    # Keep Nu's native `cd` completion. Its special completion handling can
+    # otherwise mix command candidates into the fuzzy directory menu.
+    let generated = $"((zoxide init --no-cmd nushell))\nexport alias z = __zoxide_z\nexport alias zi = __zoxide_zi\n"
     write_cache_atomic $zoxide_target $generated
     write_cache_atomic $zoxide_version_file $zoxide_fingerprint
 } else if not ($zoxide_version_file | path exists) {

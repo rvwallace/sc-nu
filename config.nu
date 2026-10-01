@@ -90,7 +90,7 @@ const cache_dir = $nu.cache-dir
 # Carapace completion bridge
 source ($cache_dir | path join "carapace.nu")
 
-# Zoxide smart directory jumper (aliases cd, cdi, z, zi)
+# Zoxide smart directory jumper (`z` and `zi`; native `cd` keeps path completion)
 source ($cache_dir | path join "zoxide.nu")
 
 # Starship prompt

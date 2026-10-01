@@ -87,7 +87,9 @@ The configuration generates integration files in Nushell's cache directory at st
 
 - **Starship**: A fast prompt that renders in Nushell.
 - **Carapace**: A completion bridge for Git, Docker, Kubectl, AWS, GitHub CLI, and other commands.
-- **Zoxide**: A directory jumper that supplies the `cd` alias.
+- **Zoxide**: A directory jumper available as `z` and `zi`. Native `cd` stays
+  available for normal path navigation and directory-aware Tab completion;
+  Zoxide's `PWD` hook still learns directories entered with `cd` automatically.
 
 ### 3. Keybindings (Reedline)
 
